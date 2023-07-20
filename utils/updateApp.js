@@ -6,6 +6,9 @@
  * 5. 下载进度监听 存储到vuex
  */
 let version = '1.0.0'
+//获取服务器版本号url
+let versionHttp = 'http://localhost:3000/api/version'
+
 // 检测版本更新
 export const checkUpdate = () => {
 	return new Promise((resolve, reject) => {
@@ -17,7 +20,7 @@ export const checkUpdate = () => {
 	    widgetInfo.version || (widgetInfo.widget ? widgetInfo.widget.version : '')
 		// 获取服务器应用资源版本号
 		uni.request({
-			url: ''
+			url: versionHttp,
 			success: (res) => {
 				let serverVersion = res.data.version
 				// 本地资源版本号和服务器资源版本号对比
@@ -47,7 +50,7 @@ export const checkUpdate = () => {
 				let localVersion = widgetInfo.version || (widgetInfo.widget ? widgetInfo.widget.version : '')
 				// 获取服务器应用资源版本号
 				uni.request({
-					url: ''
+					url: versionHttp,
 					success: (res) => {
 						let serverVersion = res.data.version
 						// 本地资源版本号和服务器资源版本号对比

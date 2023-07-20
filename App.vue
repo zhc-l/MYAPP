@@ -1,5 +1,5 @@
 <script>
-import version from '@/utils/version.js'
+	import version from '@/utils/version.js'
 	export default {
 		mixins: [version],
 		onLaunch: function() {
