@@ -1,12 +1,17 @@
 <script>
  	import { mapState } from 'vuex'
+	import vNotice from '@/components/vNotice/index.vue'
 	export default {
 		computed: {
 			...mapState('version',['downloadProgress','isProgress'])
 		},
+		components: {
+			vNotice
+		},
 		data(){
 			return {
-				show: false
+				show: false,
+				noticeList: null
 			}
 		},
 		onLaunch: function() {
@@ -39,8 +44,14 @@
 		}
 	}
 </style>
+
 <template>
 	<view>
+
+		<view class="notice">
+			<v-notice></v-notice>
+		</view>
+
 		<uni-popup ref="popup" type="top" :mask-click="false">
 			<view class="card_box">
 				下载中...{{downloadProgress}}%
@@ -49,3 +60,9 @@
 		</uni-popup>
 	</view>
 </template>
+<style lang="scss">
+.notice{
+	width: 100%;
+	height: 80rpx;
+}
+</style>
