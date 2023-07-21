@@ -45,6 +45,7 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  padding-left: 50rpx;
 }
 .v-notice .v-notice-main .v-notice-item .v-notice-item-main.data-v-dace9674 {
   display: flex;
@@ -52,6 +53,7 @@
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
+  padding: 10rpx 30rpx;
 }
 .v-notice .v-notice-main .v-notice-item .v-notice-item-img.data-v-dace9674 {
   margin-right: 20rpx;

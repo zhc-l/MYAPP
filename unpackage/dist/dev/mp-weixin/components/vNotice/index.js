@@ -158,6 +158,10 @@ var _default2 = {
     };
   },
   props: {
+    speed: {
+      type: Number,
+      default: 1
+    },
     reverse: {
       type: Boolean,
       default: false
@@ -226,12 +230,13 @@ var _default2 = {
         success: function success(_ref) {
           var screenWidth = _ref.screenWidth,
             screenHeight = _ref.screenHeight;
-          _this.distance = screenWidth / screenHeight;
+          _this.distance = screenWidth / screenHeight * _this.speed;
           _this.getNodeWidth();
         }
       });
     },
     myFunction: function myFunction() {
+      var _this2 = this;
       var float = parseFloat(this.coordinate);
       var num = float - this.distance;
       this.coordinate = num + 'px';
@@ -244,7 +249,9 @@ var _default2 = {
         this.coordinate = '0px';
         dataList = [].concat((0, _toConsumableArray2.default)(dataList), (0, _toConsumableArray2.default)(copy));
         this.noticeList = (0, _toConsumableArray2.default)(dataList);
-        this.getNodeWidth();
+        this.$nextTick(function () {
+          _this2.getNodeWidth();
+        });
       }
     },
     stop: function stop() {
@@ -255,10 +262,10 @@ var _default2 = {
       this.timer = setInterval(this.myFunction, this.HZ);
     },
     getNodeWidth: function getNodeWidth() {
-      var _this2 = this;
+      var _this3 = this;
       uni.createSelectorQuery().in(this).select('#notice0').boundingClientRect(function (data) {
-        _this2.nodeWidth = data.width;
-        _this2.start();
+        _this3.nodeWidth = data.width;
+        _this3.start();
       }).exec();
     },
     handleClick: function handleClick(item, index) {

@@ -28,6 +28,10 @@ export default {
 		}
 	},
 	props: {
+		speed: {
+			type: Number,
+			default: 1
+		},
 		reverse: {
 			type: Boolean,
 			default: false
@@ -92,7 +96,7 @@ export default {
 		init() {
 			uni.getSystemInfo({
 				success: ({screenWidth,screenHeight}) => {
-					this.distance = screenWidth/screenHeight
+					this.distance = screenWidth/screenHeight * this.speed
 					this.getNodeWidth()
 				}
 			})
@@ -110,7 +114,9 @@ export default {
 				this.coordinate = '0px'
 				dataList = [...dataList,...copy]
 				this.noticeList = [...dataList]
-				this.getNodeWidth()
+				this.$nextTick(()=>{
+					this.getNodeWidth()
+				})
 			}
 
 		},
@@ -131,7 +137,7 @@ export default {
 			// #endif 
 
 			// #ifdef H5
-				this.nodeWidth = this.$refs[`notice${this.indexKey}`][0].offsetWidth
+				this.nodeWidth = this.$refs[`notice0`][0].offsetWidth
 				this.start()
 			// #endif
 
@@ -165,12 +171,14 @@ export default {
 			align-items: center;
 			justify-content: center;
 			white-space:nowrap;
+			padding-left: 50rpx;
 			.v-notice-item-main{
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				overflow: hidden;
 				white-space:nowrap;
+				padding: 10rpx 30rpx;
 			}
 			.v-notice-item-img {
 				margin-right: 20rpx;
