@@ -1,12 +1,15 @@
 <template>
-	<div class="v-notice">
-		<div class="v-notice-main" :style="{left:coordinate}">
-			<div class="v-notice-item" v-for="(item, index) in noticeList" :key="index">
-				<image class="v-notice-item-img" :src="item.image" mode="aspectFill"></image>
-				<div class="v-notice-item-content">
-					<div class="v-notice-item-content-title">{{item.title}}</div>
-					<div class="v-notice-item-content-desc">{{item.desc}}</div>
+	<div class="v-notice" ref="vNotice" :style="{height:height}">
+		<div class="v-notice-main" ref="notice"  :style="{left:coordinate,height:height}">
+			<div class="v-notice-item" v-for="(item, index) in noticeList" :key="index" :ref="`notice${index}`" :id="`notice`+index">
+				<div class="v-notice-item-main" :style="{'background-color':isBg,color:color,'border-radius':radius}">
+					<image class="v-notice-item-img" :style="{height:imageRpx,width:imageRpx}" :src="item.image" mode="aspectFill"></image>
+					<div class="v-notice-item-content">
+						<div class="v-notice-item-content-title" v-if="item.title">{{item.title}}</div>
+						<div class="v-notice-item-content-desc" v-if="item.desc">{{item.desc}}</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -17,32 +20,69 @@ export default {
 	data() {
 		return {
 			coordinate: '0px',
-			totalWidth: 0
+			HZ: 1000/120, // 120帧
+			distance: 0, // 每帧移动距离
+			nodeWidth: 0, // 屏幕宽度
+			indexKey: 0, //
+			noticeList: []
 		}
 	},
 	props: {
-		noticeList: {
+		reverse: {
+			type: Boolean,
+			default: false
+		},
+		height: {
+			type: String,
+			default: '60rpx'
+		},
+		isBg: {
+			type: String,
+			default: ()=>'#1e295a'
+		},
+		color: {
+			type: String,
+			default: ()=>'white'
+		},
+		radius: {
+			type: String,
+			default: '80rpx'
+		},
+		list: {
 			type: Array,
 			default: () => [
 				{
-					title: '标题',
-					desc: '描述',
-					btnText: '按钮文字',
-					image: 'https://img.yzcdn.cn/vant/apple-1.jpg'
+					desc: '而缩略图(Thumbnail)就是其中之一',
+					image: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/cat-6.png'
 				},
 				{
-					title: '标题',
-					desc: '描述',
-					btnText: '按钮文字',
-					image: 'https://img.yzcdn.cn/vant/apple-2.jpg'
+					desc: '显示包括登记略图影像的各类录像目录的输出部',
+					image: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/cat-6.png'
 				},
 				{
-					title: '标题',
-					desc: '描述',
-					btnText: '按钮文字',
-					image: 'https://img.yzcdn.cn/vant/apple-3.jpg'
+					desc: '你还可以看到录制过程中',
+					image: 'https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/cat-6.png'
 				}
 			]
+		}
+	},
+	watch: {
+		list: {
+			handler(val) {
+				this.noticeList = [...val].map((item,index)=>{
+					return {
+						...item,
+						indexKey:index
+					}
+				})
+			},
+			immediate: true,
+			deep: true
+		}
+	},
+	computed: {
+		imageRpx() {
+			return parseFloat(this.height) - parseFloat(this.height)/4 + 'rpx'
 		}
 	},
 	mounted() {
@@ -50,27 +90,57 @@ export default {
 	},
 	methods: {
 		init() {
-			let HZ = 1000/120; // 120帧
-			let left = 0;
 			uni.getSystemInfo({
-				success: ({windowWidth}) => {
-					left = windowWidth / 480
-					this.totalWidth = this.noticeList.length * windowWidth
-					let timer = setInterval(() => {
-						this.totalWidth -= left;
-						this.coordinate = this.totalWidth + 'px'
-						// if(this.totalWidth <= parseInt(this.coordinate)){
-						// 	clearInterval(timer)
-						// }
-					}, HZ)
+				success: ({screenWidth,screenHeight}) => {
+					this.distance = screenWidth/screenHeight
+					this.getNodeWidth()
 				}
 			})
+		},
+		myFunction() {
+			let float = parseFloat(this.coordinate)
+			let num = float - this.distance
+			this.coordinate = num + 'px'
+
+			if( Math.abs(num) > this.nodeWidth ){ // -1   1 
+				this.stop()
+				let dataList = [...this.noticeList]
+				let copy = dataList.splice(0,1)
+				this.indexKey = dataList[0].indexKey
+				this.coordinate = '0px'
+				dataList = [...dataList,...copy]
+				this.noticeList = [...dataList]
+				this.getNodeWidth()
+			}
+
+		},
+		stop() {
+			clearInterval(this.timer)
+			this.timer = null
+		},
+		start() {
+			this.timer = setInterval(this.myFunction, this.HZ)
+		},
+		getNodeWidth() {
+
+			// #ifdef MP
+				uni.createSelectorQuery().in(this).select('#notice0').boundingClientRect((data) => {
+					this.nodeWidth = data.width
+					this.start()
+				}).exec()
+			// #endif 
+
+			// #ifdef H5
+				this.nodeWidth = this.$refs[`notice${this.indexKey}`][0].offsetWidth
+				this.start()
+			// #endif
+
 		},
 		handleClick(item, index) {
 			uni.navigateTo({
 				url: item.url
 			})
-		}
+		},
 	}
 }
 </script>
@@ -78,7 +148,6 @@ export default {
 <style lang="scss" scoped>
 .v-notice {
 	width: 100%;
-	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -89,30 +158,36 @@ export default {
 		width: auto;
 		display: flex;
 		align-items: center;
-		
+		justify-content: center;
 		.v-notice-item {
-			width: 100vw;
 			height: 100%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			white-space:nowrap;
+			.v-notice-item-main{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+				white-space:nowrap;
+			}
 			.v-notice-item-img {
-				width: 30%;
-				height: 100%;
-				border-radius: 10rpx;
+				margin-right: 20rpx;
+				border-radius: 50%;
 			}
 			.v-notice-item-content {
-				width: 70%;
 				height: 100%;
 				display: flex;
+				align-items: center;
 				justify-content: center;
 				.v-notice-item-content-title {
 					font-size: 30rpx;
-					color: #000;
+					letter-spacing: 3rpx;
 				}
 				.v-notice-item-content-desc {
-					font-size: 26rpx;
-					color: #666;
+					font-size: 30rpx;
+					letter-spacing: 3rpx;
 				}
 			}
 		}
