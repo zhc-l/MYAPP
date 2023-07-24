@@ -18,6 +18,9 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
+			this.$http.get('/users').then(res=>{
+				console.log(res,'0000000000')
+			})
 			// 下载进度条
 			if(this.isProgress){
 				this.$refs.popup.open('center')

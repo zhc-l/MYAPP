@@ -9516,8 +9516,6 @@ var _updateApp = __webpack_require__(/*! @/utils/updateApp */ 32);
  * 4. 如果用户点击更新，会自动下载新版本，并且提示用户安装
  * 5. 如果用户点击忽略，会自动关闭提示框，并且将该版本号存入本地缓存，下次不再提示
  */
-
-var version = '1.0.0';
 var _default = {
   methods: {
     checkVersion: function checkVersion() {
@@ -9569,85 +9567,9 @@ exports.default = _default;
   !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/utils/storage.js ***!
   \***********************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.setStorageSync = exports.setStorage = exports.removeStorageSync = exports.removeStorage = exports.getStorageSync = exports.getStorageInfoSync = exports.getStorageInfo = exports.getStorage = exports.clearStorageSync = exports.clearStorage = void 0;
-/**
- * 1、getStorageSync
- * 2、setStorageSync
- * 3、removeStorageSync
- * 4、clearStorageSync
- * 5、getStorageInfoSync
- * 6、getStorageInfo
- * 7、getStorage
- * 8、setStorage
- * 9、removeStorage
- * 10、clearStorage
- */
-// 获取缓存
-var getStorageSync = function getStorageSync(key) {
-  return uni.getStorageSync(key);
-};
-// 设置缓存
-exports.getStorageSync = getStorageSync;
-var setStorageSync = function setStorageSync(key, data) {
-  return uni.setStorageSync(key, data);
-};
-// 删除缓存
-exports.setStorageSync = setStorageSync;
-var removeStorageSync = function removeStorageSync(key) {
-  return uni.removeStorageSync(key);
-};
-// 清空缓存
-exports.removeStorageSync = removeStorageSync;
-var clearStorageSync = function clearStorageSync() {
-  return uni.clearStorageSync();
-};
-// 获取缓存信息
-exports.clearStorageSync = clearStorageSync;
-var getStorageInfoSync = function getStorageInfoSync() {
-  return uni.getStorageInfoSync();
-};
-// 获取缓存信息
-exports.getStorageInfoSync = getStorageInfoSync;
-var getStorageInfo = function getStorageInfo() {
-  return uni.getStorageInfo();
-};
-// 获取缓存信息
-exports.getStorageInfo = getStorageInfo;
-var getStorage = function getStorage(key) {
-  return uni.getStorage({
-    key: key
-  });
-};
-// 设置缓存信息
-exports.getStorage = getStorage;
-var setStorage = function setStorage(key, data) {
-  return uni.setStorage({
-    key: key,
-    data: data
-  });
-};
-// 删除缓存信息
-exports.setStorage = setStorage;
-var removeStorage = function removeStorage(key) {
-  return uni.removeStorage({
-    key: key
-  });
-};
-// 清空缓存信息
-exports.removeStorage = removeStorage;
-var clearStorage = function clearStorage() {
-  return uni.clearStorage();
-};
-exports.clearStorage = clearStorage;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+throw new Error("Module build failed (from ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\vmap\\Documents\\HBuilderProjects\\MYAPP\\utils\\storage.js'");
 
 /***/ }),
 /* 32 */
@@ -9660,10 +9582,12 @@ exports.clearStorage = clearStorage;
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.installUpdate = exports.downloadUpdate = exports.checkUpdate = void 0;
+var _index = _interopRequireDefault(__webpack_require__(/*! ../http/index.js */ 41));
 /**
  * 1. checkUpdate: 检测版本更新
  * 2. downloadUpdate: 下载新版本
@@ -9671,9 +9595,9 @@ exports.installUpdate = exports.downloadUpdate = exports.checkUpdate = void 0;
  * 4. compareVersion: 比较版本号
  * 5. 下载进度监听 存储到vuex
  */
-var version = '1.0.0';
+
 // 获取服务器版本号url
-var versionHttp = 'http://localhost:3000/api/version';
+var versionHttp = '/version';
 
 // 检测版本更新
 var checkUpdate = function checkUpdate() {
@@ -11282,8 +11206,9 @@ uni.addInterceptor({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.http = void 0;
-var http = {
+exports.default = void 0;
+var baseUrl =  true ? 'http://localhost:3000' : undefined;
+var _default = {
   get: function get(url, params) {
     return new Promise(function (resolve, reject) {
       uni.request({
@@ -11344,8 +11269,68 @@ var http = {
       });
     });
   }
+}; // 请求拦截器 用于请求前和响应后做一些处理
+exports.default = _default;
+uni.addInterceptor('request', {
+  invoke: function invoke(args) {
+    args.url = baseUrl + args.url;
+  },
+  success: function success(res) {
+    return getStatusType(res);
+  }
+});
+var getStatusType = function getStatusType(res) {
+  var status = res.statusCode;
+  var message = '';
+  switch (status) {
+    case 200:
+      message = '请求成功';
+      break;
+    case 400:
+      message = '请求错误';
+      break;
+    case 401:
+      message = '未授权，请登录';
+      break;
+    case 403:
+      message = '拒绝访问';
+      break;
+    case 404:
+      message = "\u8BF7\u6C42\u5730\u5740\u51FA\u9519: ".concat(res.url);
+      break;
+    case 408:
+      message = '请求超时';
+      break;
+    case 500:
+      message = '服务器内部错误';
+      break;
+    case 501:
+      message = '服务未实现';
+      break;
+    case 502:
+      message = '网关错误';
+      break;
+    case 503:
+      message = '服务不可用';
+      break;
+    case 504:
+      message = '网关超时';
+      break;
+    case 505:
+      message = 'HTTP版本不受支持';
+      break;
+    default:
+      message = '请求失败';
+  }
+  if (status !== 200) {
+    uni.showToast({
+      title: message,
+      icon: 'none',
+      duration: 2000
+    });
+  }
+  return res.data;
 };
-exports.http = http;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
@@ -11371,14 +11356,44 @@ exports.http = http;
 /* 61 */,
 /* 62 */,
 /* 63 */,
-/* 64 */,
+/* 64 */
+/*!**********************************************************************************!*\
+  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/components/vNotice/index.js ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  data: function data() {
+    return {
+      show: false,
+      animationStyle: {}
+    };
+  },
+  methods: {
+    open: function open() {
+      this.show = true;
+    }
+  }
+};
+exports.default = _default;
+
+/***/ }),
 /* 65 */,
 /* 66 */,
 /* 67 */,
 /* 68 */,
 /* 69 */,
 /* 70 */,
-/* 71 */
+/* 71 */,
+/* 72 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/uni_modules/uni-transition/components/uni-transition/createAnimation.js ***!
   \******************************************************************************************************************************/
