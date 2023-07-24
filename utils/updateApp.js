@@ -5,9 +5,10 @@
  * 4. compareVersion: 比较版本号
  * 5. 下载进度监听 存储到vuex
  */
-let version = '1.0.0'
+import http from '../http/index.js'
+
 // 获取服务器版本号url
-let versionHttp = 'http://localhost:3000/api/version'
+let versionHttp = '/version'
 
 // 检测版本更新
 export const checkUpdate = () => {
@@ -18,19 +19,18 @@ export const checkUpdate = () => {
       // 获取本地应用资源版本号
       let localVersion = widgetInfo.version || (widgetInfo.widget ? widgetInfo.widget.version : '')
       // 获取服务器应用资源版本号
-      uni.request({
-        url: versionHttp,
-        success: res => {
+      http
+        .get(versionHttp)
+        .then(res => {
           let serverVersion = res.data.version
           // 本地资源版本号和服务器资源版本号对比
           let hasUpdate = compareVersion(localVersion, serverVersion)
           resolve({ hasUpdate, serverVersion })
-        },
-        fail: err => {
+        })
+        .catch(err => {
           this.$store.dispatch('version/setIsProgress', false)
           reject(err)
-        },
-      })
+        })
     })
     // #endif
     // #ifndef APP-PLUS

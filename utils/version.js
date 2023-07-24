@@ -7,7 +7,6 @@
  */
 import { getStorageSync, setStorageSync } from '@/utils/storage'
 import { checkUpdate, downloadUpdate, installUpdate } from '@/utils/updateApp'
-let version = '1.0.0'
 export default {
   methods: {
     checkVersion() {
