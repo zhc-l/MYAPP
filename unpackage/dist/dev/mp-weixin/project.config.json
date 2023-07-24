@@ -19,8 +19,8 @@
     "condition": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.33.0",
-  "appid": "touristappid",
+  "libVersion": "3.0.0",
+  "appid": "wx43f1a45e21dadb54",
   "projectname": "MYAPP",
   "condition": {},
   "editorSetting": {

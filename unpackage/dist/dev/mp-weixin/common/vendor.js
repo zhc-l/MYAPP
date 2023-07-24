@@ -14,7 +14,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var objectKeys = ['qy', 'env', 'error', 'version', 'lanDebug', 'cloud', 'serviceMarket', 'router', 'worklet'];
+var objectKeys = ['qy', 'env', 'error', 'version', 'lanDebug', 'cloud', 'serviceMarket', 'router', 'worklet', '__webpack_require_UNI_MP_PLUGIN__'];
 var singlePageDisableKey = ['lanDebug', 'router', 'worklet'];
 var target = typeof globalThis !== 'undefined' ? globalThis : function () {
   return this;
@@ -780,8 +780,8 @@ function populateParameters(result) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.8.4",
-    uniRuntimeVersion: "3.8.4",
+    uniCompileVersion: "3.8.7",
+    uniRuntimeVersion: "3.8.7",
     uniPlatform: undefined || "mp-weixin",
     deviceBrand: deviceBrand,
     deviceModel: model,
@@ -1954,14 +1954,10 @@ function handleEvent(event) {
   }
 }
 var eventChannels = {};
-var eventChannelStack = [];
 function getEventChannel(id) {
-  if (id) {
-    var eventChannel = eventChannels[id];
-    delete eventChannels[id];
-    return eventChannel;
-  }
-  return eventChannelStack.shift();
+  var eventChannel = eventChannels[id];
+  delete eventChannels[id];
+  return eventChannel;
 }
 var hooks = ['onShow', 'onHide', 'onError', 'onPageNotFound', 'onThemeChange', 'onUnhandledRejection'];
 function initEventChannel() {
@@ -2428,7 +2424,7 @@ if (typeof Proxy !== 'undefined' && "mp-weixin" !== 'app-plus') {
       uni[name] = promisify(name, todoApis[name]);
     });
     Object.keys(extraApi).forEach(function (name) {
-      uni[name] = promisify(name, todoApis[name]);
+      uni[name] = promisify(name, extraApi[name]);
     });
   }
   Object.keys(eventApi).forEach(function (name) {
@@ -9481,9 +9477,9 @@ internalMixin(Vue);
 
 /***/ }),
 /* 26 */
-/*!*****************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/pages.json ***!
-  \*****************************************************************/
+/*!**************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/pages.json ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -9494,9 +9490,9 @@ internalMixin(Vue);
 /* 28 */,
 /* 29 */,
 /* 30 */
-/*!***********************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/utils/version.js ***!
-  \***********************************************************************/
+/*!********************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/utils/version.js ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9565,9 +9561,9 @@ exports.default = _default;
 
 /***/ }),
 /* 31 */
-/*!***********************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/utils/storage.js ***!
-  \***********************************************************************/
+/*!********************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/utils/storage.js ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9651,9 +9647,9 @@ exports.clearStorage = clearStorage;
 
 /***/ }),
 /* 32 */
-/*!*************************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/utils/updateApp.js ***!
-  \*************************************************************************/
+/*!**********************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/utils/updateApp.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9857,9 +9853,9 @@ function normalizeComponent (
 
 /***/ }),
 /* 36 */
-/*!*********************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/store/index.js ***!
-  \*********************************************************************/
+/*!******************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/store/index.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11162,9 +11158,9 @@ module.exports = index_cjs;
 
 /***/ }),
 /* 38 */
-/*!******************************************************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/store/modules sync nonrecursive ([a-z_]+)\.js$/ ***!
-  \******************************************************************************************************/
+/*!***************************************************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/store/modules sync nonrecursive ([a-z_]+)\.js$/ ***!
+  \***************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11194,9 +11190,9 @@ webpackContext.id = 38;
 
 /***/ }),
 /* 39 */
-/*!*******************************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/store/modules/version.js ***!
-  \*******************************************************************************/
+/*!****************************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/store/modules/version.js ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11247,9 +11243,9 @@ exports.default = _default;
 
 /***/ }),
 /* 40 */
-/*!*******************************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/uni.promisify.adaptor.js ***!
-  \*******************************************************************************/
+/*!****************************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/uni.promisify.adaptor.js ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11270,9 +11266,9 @@ uni.addInterceptor({
 
 /***/ }),
 /* 41 */
-/*!********************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/http/index.js ***!
-  \********************************************************************/
+/*!*****************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/http/index.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11379,9 +11375,9 @@ exports.http = http;
 /* 69 */,
 /* 70 */,
 /* 71 */
-/*!******************************************************************************************************************************!*\
-  !*** C:/Users/vmap/Documents/HBuilderProjects/MYAPP/uni_modules/uni-transition/components/uni-transition/createAnimation.js ***!
-  \******************************************************************************************************************************/
+/*!***************************************************************************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/uni_modules/uni-transition/components/uni-transition/createAnimation.js ***!
+  \***************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

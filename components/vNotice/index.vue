@@ -20,18 +20,26 @@ export default {
 	data() {
 		return {
 			coordinate: '0px',
-			HZ: 1000/120, // 120帧
+			HZ: 1000/60, // 30帧 兼容大部分手机刷新率
 			distance: 0, // 每帧移动距离
 			nodeWidth: 0, // 屏幕宽度
-			indexKey: 0, //
-			noticeList: []
+			noticeList: [], // 数据
+			timer: null, // 定时器
 		}
 	},
 	props: {
-		speed: {
-			type: Number,
-			default: 1
-		},
+		// #ifdef MP || APP-PLUS
+			speed: {
+				type: Number,
+				default: 1
+			},
+		// #endif
+		// #ifdef H5
+			speed: {
+				type: Number,
+				default: 1
+			},
+		// #endif
 		reverse: {
 			type: Boolean,
 			default: false
@@ -73,12 +81,7 @@ export default {
 	watch: {
 		list: {
 			handler(val) {
-				this.noticeList = [...val].map((item,index)=>{
-					return {
-						...item,
-						indexKey:index
-					}
-				})
+				this.noticeList = [...val]
 			},
 			immediate: true,
 			deep: true
@@ -92,8 +95,15 @@ export default {
 	mounted() {
 		this.init()
 	},
+	onHide(){
+		this.stop()
+	},
+	onUnload(){
+		this.stop()
+	},
 	methods: {
 		init() {
+			this.stop()
 			uni.getSystemInfo({
 				success: ({screenWidth,screenHeight}) => {
 					this.distance = screenWidth/screenHeight * this.speed
@@ -102,34 +112,56 @@ export default {
 			})
 		},
 		myFunction() {
-			let float = parseFloat(this.coordinate)
-			let num = float - this.distance
+			let num = parseFloat(this.coordinate)
+			if(this.reverse) {
+				num += this.distance
+			} else {
+				num -= this.distance
+			}
 			this.coordinate = num + 'px'
 
-			if( Math.abs(num) > this.nodeWidth ){ // -1   1 
-				this.stop()
+			if( Math.abs(num) > this.nodeWidth ){ // -1  1
 				let dataList = [...this.noticeList]
 				let copy = dataList.splice(0,1)
-				this.indexKey = dataList[0].indexKey
 				this.coordinate = '0px'
 				dataList = [...dataList,...copy]
+				this.stop()
 				this.noticeList = [...dataList]
 				this.$nextTick(()=>{
 					this.getNodeWidth()
 				})
+			}else{
+				// #ifdef H5
+					this.start()
+				// #endif
 			}
 
 		},
 		stop() {
-			clearInterval(this.timer)
-			this.timer = null
+			// #ifdef MP || APP-PLUS
+				if(this.timer){
+					clearInterval(this.timer)
+				}
+			// #endif
+			// #ifdef H5
+				cancelAnimationFrame(this.myFunction)
+			// #endif
 		},
 		start() {
-			this.timer = setInterval(this.myFunction, this.HZ)
+			// #ifdef MP || APP-PLUS
+				this.timer = setInterval(this.myFunction, this.HZ)
+			// #endif
+			// #ifdef H5
+				window.requestAnimationFrame(this.myFunction) ||
+				window.webkitRequestAnimationFrame(this.myFunction) ||
+				window.mozRequestAnimationFrame(this.myFunction) ||
+				window.oRequestAnimationFrame(this.myFunction) ||
+				window.msRequestAnimationFrame(this.myFunction)
+			// #endif
 		},
 		getNodeWidth() {
 
-			// #ifdef MP
+			// #ifdef MP || APP-PLUS
 				uni.createSelectorQuery().in(this).select('#notice0').boundingClientRect((data) => {
 					this.nodeWidth = data.width
 					this.start()
