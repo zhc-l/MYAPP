@@ -5,7 +5,6 @@
  * 4. 如果用户点击更新，会自动下载新版本，并且提示用户安装
  * 5. 如果用户点击忽略，会自动关闭提示框，并且将该版本号存入本地缓存，下次不再提示
  */
-import { getStorageSync, setStorageSync } from '@/utils/storage'
 import { checkUpdate, downloadUpdate, installUpdate } from '@/utils/updateApp'
 export default {
   methods: {

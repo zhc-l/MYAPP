@@ -775,7 +775,7 @@ function populateParameters(result) {
   // wx.getAccountInfoSync
 
   var parameters = {
-    appId: "__UNI__1BD8601",
+    appId: "__UNI__21E0218",
     appName: "MYAPP",
     appVersion: "1.0.0",
     appVersionCode: "100",
@@ -874,7 +874,7 @@ var getAppBaseInfo = {
     var _hostName = getHostName(result);
     var hostLanguage = language.replace('_', '-');
     result = sortObject(Object.assign(result, {
-      appId: "__UNI__1BD8601",
+      appId: "__UNI__21E0218",
       appName: "MYAPP",
       appVersion: "1.0.0",
       appVersionCode: "100",
@@ -9503,8 +9503,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _storage = __webpack_require__(/*! @/utils/storage */ 31);
-var _updateApp = __webpack_require__(/*! @/utils/updateApp */ 32);
+var _updateApp = __webpack_require__(/*! @/utils/updateApp */ 31);
 /**
  * 1. 在需要更新版本的页面引入该mixin
  * 2. 在页面中调用 this.checkVersion() 即可
@@ -9543,7 +9542,7 @@ var _default = {
                 // 用户点击取消，关闭提示框
                 console.log('用户点击忽略');
                 // 将该版本号存入本地缓存
-                (0, _storage.setStorageSync)('version', res.version);
+                setStorageSync('version', res.version);
               }
             }
           });
@@ -9559,16 +9558,6 @@ exports.default = _default;
 
 /***/ }),
 /* 31 */
-/*!********************************************************!*\
-  !*** /Users/mac/Desktop/gitHub/MYAPP/utils/storage.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader/index.js):\nError: ENOENT: no such file or directory, open '/Users/mac/Desktop/gitHub/MYAPP/utils/storage.js'");
-
-/***/ }),
-/* 32 */
 /*!**********************************************************!*\
   !*** /Users/mac/Desktop/gitHub/MYAPP/utils/updateApp.js ***!
   \**********************************************************/
@@ -9583,7 +9572,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.installUpdate = exports.downloadUpdate = exports.checkUpdate = void 0;
-var _index = _interopRequireDefault(__webpack_require__(/*! ../http/index.js */ 41));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../http/index.js */ 32));
 /**
  * 1. checkUpdate: 检测版本更新
  * 2. downloadUpdate: 下载新版本
@@ -9641,6 +9630,147 @@ var compareVersion = function compareVersion(localVersion, serverVersion) {
     return false;
   }
 };
+
+/***/ }),
+/* 32 */
+/*!*****************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/http/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var baseUrl =  true ? 'http://localhost:3000' : undefined;
+var _default = {
+  get: function get(url, params) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: url,
+        method: 'GET',
+        data: params,
+        success: function success(res) {
+          resolve(res);
+        },
+        fail: function fail(err) {
+          reject(err);
+        }
+      });
+    });
+  },
+  post: function post(url, params) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: url,
+        method: 'POST',
+        data: params,
+        success: function success(res) {
+          resolve(res);
+        },
+        fail: function fail(err) {
+          reject(err);
+        }
+      });
+    });
+  },
+  put: function put(url, params) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: url,
+        method: 'PUT',
+        data: params,
+        success: function success(res) {
+          resolve(res);
+        },
+        fail: function fail(err) {
+          reject(err);
+        }
+      });
+    });
+  },
+  delete: function _delete(url, params) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: url,
+        method: 'DELETE',
+        data: params,
+        success: function success(res) {
+          resolve(res);
+        },
+        fail: function fail(err) {
+          reject(err);
+        }
+      });
+    });
+  }
+}; // 请求拦截器 用于请求前和响应后做一些处理
+exports.default = _default;
+uni.addInterceptor('request', {
+  invoke: function invoke(args) {
+    args.url = baseUrl + args.url;
+  },
+  success: function success(res) {
+    return getStatusType(res);
+  }
+});
+var getStatusType = function getStatusType(res) {
+  var status = res.statusCode;
+  var message = '';
+  switch (status) {
+    case 200:
+      message = '请求成功';
+      break;
+    case 400:
+      message = '请求错误';
+      break;
+    case 401:
+      message = '未授权，请登录';
+      break;
+    case 403:
+      message = '拒绝访问';
+      break;
+    case 404:
+      message = "\u8BF7\u6C42\u5730\u5740\u51FA\u9519: ".concat(res.url);
+      break;
+    case 408:
+      message = '请求超时';
+      break;
+    case 500:
+      message = '服务器内部错误';
+      break;
+    case 501:
+      message = '服务未实现';
+      break;
+    case 502:
+      message = '网关错误';
+      break;
+    case 503:
+      message = '服务不可用';
+      break;
+    case 504:
+      message = '网关超时';
+      break;
+    case 505:
+      message = 'HTTP版本不受支持';
+      break;
+    default:
+      message = '请求失败';
+  }
+  if (status !== 200) {
+    uni.showToast({
+      title: message,
+      icon: 'none',
+      duration: 2000
+    });
+  }
+  return res.data;
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
 /* 33 */,
@@ -11189,147 +11319,7 @@ uni.addInterceptor({
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 41 */
-/*!*****************************************************!*\
-  !*** /Users/mac/Desktop/gitHub/MYAPP/http/index.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var baseUrl =  true ? 'http://localhost:3000' : undefined;
-var _default = {
-  get: function get(url, params) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: url,
-        method: 'GET',
-        data: params,
-        success: function success(res) {
-          resolve(res);
-        },
-        fail: function fail(err) {
-          reject(err);
-        }
-      });
-    });
-  },
-  post: function post(url, params) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: url,
-        method: 'POST',
-        data: params,
-        success: function success(res) {
-          resolve(res);
-        },
-        fail: function fail(err) {
-          reject(err);
-        }
-      });
-    });
-  },
-  put: function put(url, params) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: url,
-        method: 'PUT',
-        data: params,
-        success: function success(res) {
-          resolve(res);
-        },
-        fail: function fail(err) {
-          reject(err);
-        }
-      });
-    });
-  },
-  delete: function _delete(url, params) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: url,
-        method: 'DELETE',
-        data: params,
-        success: function success(res) {
-          resolve(res);
-        },
-        fail: function fail(err) {
-          reject(err);
-        }
-      });
-    });
-  }
-}; // 请求拦截器 用于请求前和响应后做一些处理
-exports.default = _default;
-uni.addInterceptor('request', {
-  invoke: function invoke(args) {
-    args.url = baseUrl + args.url;
-  },
-  success: function success(res) {
-    return getStatusType(res);
-  }
-});
-var getStatusType = function getStatusType(res) {
-  var status = res.statusCode;
-  var message = '';
-  switch (status) {
-    case 200:
-      message = '请求成功';
-      break;
-    case 400:
-      message = '请求错误';
-      break;
-    case 401:
-      message = '未授权，请登录';
-      break;
-    case 403:
-      message = '拒绝访问';
-      break;
-    case 404:
-      message = "\u8BF7\u6C42\u5730\u5740\u51FA\u9519: ".concat(res.url);
-      break;
-    case 408:
-      message = '请求超时';
-      break;
-    case 500:
-      message = '服务器内部错误';
-      break;
-    case 501:
-      message = '服务未实现';
-      break;
-    case 502:
-      message = '网关错误';
-      break;
-    case 503:
-      message = '服务不可用';
-      break;
-    case 504:
-      message = '网关超时';
-      break;
-    case 505:
-      message = 'HTTP版本不受支持';
-      break;
-    default:
-      message = '请求失败';
-  }
-  if (status !== 200) {
-    uni.showToast({
-      title: message,
-      icon: 'none',
-      duration: 2000
-    });
-  }
-  return res.data;
-};
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
-
-/***/ }),
+/* 41 */,
 /* 42 */,
 /* 43 */,
 /* 44 */,
@@ -11359,7 +11349,18 @@ var getStatusType = function getStatusType(res) {
 /* 68 */,
 /* 69 */,
 /* 70 */,
-/* 71 */
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */
 /*!***************************************************************************************************************!*\
   !*** /Users/mac/Desktop/gitHub/MYAPP/uni_modules/uni-transition/components/uni-transition/createAnimation.js ***!
   \***************************************************************************************************************/
@@ -11490,6 +11491,43 @@ function createAnimation(option, _this) {
   clearTimeout(_this.timer);
   return new MPAnimation(option, _this);
 }
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */
+/*!******************************************************!*\
+  !*** /Users/mac/Desktop/gitHub/MYAPP/utils/index.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.navTo = void 0;
+var navTo = function navTo(url) {
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var urlParams = '';
+  for (var key in params) {
+    urlParams += "&".concat(key, "=").concat(params[key]);
+  }
+  uni.navigateTo({
+    url: "".concat(url, "?").concat(urlParams.slice(1))
+  });
+};
+exports.navTo = navTo;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ })

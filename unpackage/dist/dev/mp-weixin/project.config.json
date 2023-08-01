@@ -19,7 +19,7 @@
     "condition": false
   },
   "compileType": "miniprogram",
-  "libVersion": "3.0.0",
+  "libVersion": "",
   "appid": "wx43f1a45e21dadb54",
   "projectname": "MYAPP",
   "condition": {},

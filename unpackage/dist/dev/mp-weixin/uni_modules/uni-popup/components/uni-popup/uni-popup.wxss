@@ -24,6 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.content {
+  padding-top: 25px;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
 .uni-popup {
   position: fixed;
   z-index: 99;

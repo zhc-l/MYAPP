@@ -24,6 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.content {
+  padding-top: 25px;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
 /*每个页面公共css */
 .card_box {
   width: 80vw;
@@ -64,6 +70,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.content {
+  padding-top: 25px;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
 .notice {
   width: 100%;
   height: 80rpx;

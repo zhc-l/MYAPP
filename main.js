@@ -4,6 +4,8 @@ import store from './store'
 import Vue from 'vue'
 import './uni.promisify.adaptor'
 import http from './http'
+import { navTo } from './utils'
+Vue.prototype.$navTo = navTo
 Vue.config.productionTip = false
 Vue.prototype.$http = http
 App.mpType = 'app'

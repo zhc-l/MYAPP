@@ -4,6 +4,7 @@
        url('//at.alicdn.com/t/c/font_4190408_vprmuvmnxrl.woff?t=1690795022729') format('woff'),
        url('//at.alicdn.com/t/c/font_4190408_vprmuvmnxrl.ttf?t=1690795022729') format('truetype');
 }
+
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;
@@ -11,24 +12,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .icon-xiangyou1:before {
   content: "\e775";
 }
+
 .icon-mummy:before {
   content: "\ec40";
 }
+
 .icon-Home:before {
   content: "\e6a8";
 }
-@font-face {
-	font-family: "pingfang";
-	/* base64 */
-	src: url(`~@/static/iconFont/pingfang.ttf`) format("truetype");
-}
-
-/*每个页面公共css */
-page{
-	background-color: #2B2E4A;
-	font-family: pingfang;
-}
-

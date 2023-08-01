@@ -103,7 +103,7 @@ var components
 try {
   components = {
     uniPopup: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 52))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 58))
     },
   }
 } catch (e) {
@@ -173,7 +173,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var vNotice = function vNotice() {
   __webpack_require__.e(/*! require.ensure | components/vNotice/index */ "components/vNotice/index").then((function () {
-    return resolve(__webpack_require__(/*! @/components/vNotice/index.vue */ 59));
+    return resolve(__webpack_require__(/*! @/components/vNotice/index.vue */ 65));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
@@ -191,9 +191,6 @@ var _default = {
     console.log('App Launch');
   },
   onShow: function onShow() {
-    this.$http.get('/users').then(function (res) {
-      console.log(res, '0000000000');
-    });
     // 下载进度条
     if (this.isProgress) {
       this.$refs.popup.open('center');

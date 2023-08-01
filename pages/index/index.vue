@@ -6,7 +6,7 @@
 			...mapState('version',['downloadProgress','isProgress'])
 		},
 		components: {
-			vNotice
+			vNotice,
 		},
 		data(){
 			return {
@@ -18,9 +18,6 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
-			this.$http.get('/users').then(res=>{
-				console.log(res,'0000000000')
-			})
 			// 下载进度条
 			if(this.isProgress){
 				this.$refs.popup.open('center')
@@ -61,6 +58,8 @@
 				<progress :percent="downloadProgress" stroke-width="10" />
 			</view>
 		</uni-popup>
+
+		<button @click="$navTo('/pages/user/index')">跳转用户层</button>
 	</view>
 </template>
 <style lang="scss">
