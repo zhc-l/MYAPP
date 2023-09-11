@@ -19,12 +19,11 @@
 	@import url("~@/static/iconFont/index.scss");
 	@font-face {
 		font-family: "pingfang";
-		/* base64 */
-		src: url(`~@/static/iconFont/pingfang.ttf`) format("truetype");
+		src: url("./static/iconFont/pingfang.ttf") format("truetype");
 	}
 	/*每个页面公共css */
 	page{
-		background-color: #2B2E4A;
+		/* background-color: #2B2E4A; */
 		font-family: pingfang;
 	}
 </style>

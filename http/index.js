@@ -1,5 +1,5 @@
 const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000'
-export default {
+let http = {
   get: (url, params) => {
     return new Promise((resolve, reject) => {
       uni.request({
@@ -63,9 +63,20 @@ export default {
 }
 // 请求拦截器 用于请求前和响应后做一些处理
 uni.addInterceptor('request', {
+  // 请求前拦截
   invoke: args => {
     args.url = baseUrl + args.url
+    // token
+    const token = uni.getStorageSync('token')
+    if (token) {
+      args.header = {
+        ...args.header,
+        token: token,
+      }
+    }
+    return args
   },
+  // 响应后拦截
   success: res => {
     return getStatusType(res)
   },
@@ -82,6 +93,9 @@ const getStatusType = res => {
       break
     case 401:
       message = '未授权，请登录'
+      uni.navigateTo({
+        url: '/pages/login/login',
+      })
       break
     case 403:
       message = '拒绝访问'
@@ -122,3 +136,36 @@ const getStatusType = res => {
   }
   return res.data
 }
+
+export default http
+
+// 
+export const RESTFul = function(target) {
+  return {
+    query: params => http.post(target + "/page", params),
+    export: (params, url, config) =>
+      http.post(url ? target + url : target + "/export", params, config),
+    create: params => http.post(target, params),
+    delete: ids => http.delete(target, { params: { ids } }),
+    update: params => http.put(target, params),
+    get: id => http.get(target + "/" + id),
+    all: params => http.post(target + "/query", params),
+    search: bookmarkName =>
+      http.get(target + "/search?bookmarkName=" + bookmarkName),
+    tree: params => http.post(target + "/tree", params),
+    saveOrUpdate: params => http.post(target + "/saveOrUpdate", params),
+    allList: params => http.get(target + "/allList", params),
+    fuzzy: params =>
+      http.get(target + "/fuzzy?wbsFullNo=" + params.wbsFullNo),
+    smidByWBSNo: params =>
+      http.get(target + "/wbsNo/smid?wbsNo=" + params.wbsNo),
+    listByTimeRange: params =>
+      http.get(target + `/listByTimeRange`, { params }),
+    getExportFields: () => http.get(target + "/fields/export"),
+    enums: params => http.get(target + "/enums", params),
+    saveAll: params => http.post(target + "/saveAll", params),
+    projLayer: params => http.get(target + "/tree"),
+    insertOrUpdate: params => http.post(target + "/insertOrUpdate", params),
+  };
+};
+

@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/user/index"
+    "pages/user/index",
+    "pages/form/index",
+    "pages/live-pusher/live-pusher"
   ],
   "subPackages": [],
   "window": {
